@@ -1,0 +1,67 @@
+{
+  "name": "ArduPilot Development Environment",
+  "dockerFile": "Dockerfile",
+  "context": "..",
+  "workspaceFolder": "/workspaces/ardupilot",
+  "remoteUser": "ardupilot",
+
+  // 功能配置
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.10"
+    },
+    "ghcr.io/devcontainers/features/desktop-lite:1": {}
+  },
+
+  // 环境变量
+  "remoteEnv": {
+    "PATH": "/usr/local/bin:${containerEnv:PATH}",
+    "ARDUPILOT_ROOT": "/workspaces/ardupilot"
+  },
+
+  // 端口转发（SITL 仿真需要）
+  "forwardPorts": [
+    5760,
+    14550,
+    9002
+  ],
+
+  // 挂载配置
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached"
+  ],
+
+  // 运行后命令
+  "postCreateCommand": "sudo usermod -a -G dialout ardupilot && echo '\n127.0.0.1 docker-desktop' | sudo tee -a /etc/hosts > /dev/null && ./Tools/environment_install/install-prereqs-ubuntu.sh -y",
+
+  // 自定义设置
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-python.python",
+        "ms-vscode.cmake-tools",
+        "xaver.clang-format",
+        "twxs.cmake"
+      ],
+      "settings": {
+        "C_Cpp.default.compilerPath": "/usr/bin/g++",
+        "C_Cpp.intelliSenseEngine": "default",
+        "python.defaultInterpreterPath": "/usr/bin/python3",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+      }
+    }
+  },
+
+  // 以 root 用户运行（需要安装系统包）
+  
+  // 容器运行选项
+  "runArgs": [
+    "--cap-add=SYS_PTRACE",
+    "--security-opt",
+    "seccomp=unconfined",
+    "--network=host"
+  ]
+}

@@ -256,6 +256,7 @@ function install_arm_none_eabi_toolchain() {
                     echo "Installing toolchain for STM32 Boards"
                     echo "Downloading from ArduPilot server"
                     sudo wget --progress=dot:giga https://firmware.ardupilot.org/Tools/STM32-tools/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
+                    # sudo wget -nc --progress=dot:giga https://firmware.ardupilot.org/Tools/STM32-tools/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
                     echo "Installing..."
                     sudo chmod -R 777 gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
                     sudo tar xjf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
@@ -304,7 +305,8 @@ function maybe_prompt_user() {
 }
 
 heading "Add user to dialout group to allow managing serial ports"
-sudo usermod -a -G dialout $USER
+# sudo usermod -a -G dialout $USER
+sudo usermod -a -G dialout ardupilot
 echo "Done!"
 
 # Add back python symlink to python interpreter on Ubuntu >= 20.04
